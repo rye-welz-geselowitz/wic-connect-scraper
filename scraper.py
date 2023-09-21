@@ -9,6 +9,14 @@ from bs4 import BeautifulSoup
 
 LOGIN_PAGE_URL = 'https://www.wicconnect.com/wicconnectclient/siteLogonClient.recip?state=NEW%20YORK%20WIC&stateAgencyId=1'
 
+class LoginException(Exception):
+    pass
+
+class ScrapingException(Exception):
+    def __init__(self, error, html_doc):
+        self.error = str(error)
+        self.html_doc = html_doc
+
 def get_driver(headless=True):
     chrome_options = webdriver.ChromeOptions()
     chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN", "")
@@ -48,7 +56,7 @@ def get_benefits_from_html(html_doc):
             'name': tds[-4].text.strip(),
             'unit': tds[-3].text,
             'issued': float(tds[-2].text),
-            'remaining': float(tds[-1].text) 
+            'remaining': float(tds[-1].text)
         }
         benefits.append(benefit)
     
@@ -59,10 +67,16 @@ def scrape_benefits(username, password, use_headless_driver=True):
     driver = get_driver(use_headless_driver)
     try:
         login(driver, username, password)
-        benefits = get_benefits_from_html(driver.page_source)
     except Exception as e:
         driver.quit()
-        raise e
-    else:
+        raise LoginException(e)
+    
+    html_doc = driver.page_source
+    try:
+        benefits = get_benefits_from_html(html_doc)
+    except Exception as e:
         driver.quit()
-        return benefits
+        raise ScrapingException(error=e, html_doc=html_doc)
+
+    driver.quit()
+    return benefits
