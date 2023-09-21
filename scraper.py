@@ -57,5 +57,12 @@ def get_benefits_from_html(html_doc):
 
 def scrape_benefits(username, password, use_headless_driver=True):
     driver = get_driver(use_headless_driver)
-    login(driver, username, password)
-    return get_benefits_from_html(driver.page_source)
+    try:
+        login(driver, username, password)
+        benefits = get_benefits_from_html(driver.page_source)
+    except Exception as e:
+        driver.quit()
+        raise e
+    else:
+        driver.quit()
+        return benefits
