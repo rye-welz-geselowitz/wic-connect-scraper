@@ -47,8 +47,8 @@ def get_benefits_from_html(html_doc):
         benefit = {
             'name': tds[-4].text.strip(),
             'unit': tds[-3].text,
-            'issued': tds[-2].text,
-            'remaining': tds[-1].text 
+            'issued': float(tds[-2].text),
+            'remaining': float(tds[-1].text) 
         }
         benefits.append(benefit)
     
