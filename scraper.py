@@ -187,7 +187,7 @@ def _scrape_transactions_for_year(username, password, year_idx, use_headless_dri
 def _flatten(l):
     return [item for sublist in l for item in sublist]
 
-def scrape_transactions_concurrently(username, password, use_headless_driver=True):
+def scrape_transactions(username, password, use_headless_driver=True):
     year_idxs = list(range(0, datetime.now().year - 2019 + 1))
     with concurrent.futures.ThreadPoolExecutor() as executor:
         transactions = list(executor.map(lambda x: _scrape_transactions_for_year(username, password, year_idx=x, use_headless_driver=use_headless_driver), year_idxs))

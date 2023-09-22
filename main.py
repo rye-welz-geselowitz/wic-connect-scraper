@@ -1,5 +1,5 @@
 from creds import USERNAME, PASSWORD
-from scraper import scrape_benefits, scrape_transactions_concurrently
+from scraper import scrape_benefits, scrape_transactions
 import os 
 from datetime import datetime
 import csv
@@ -21,7 +21,7 @@ def scrape(username, password):
     print(f'Benefits took {datetime.now() - start_dt}')
 
     start_dt = datetime.now()
-    transactions = scrape_transactions_concurrently(username, password, USE_HEADLESS_DRIVER)
+    transactions = scrape_transactions(username, password, USE_HEADLESS_DRIVER)
 
     with open('transactions.csv', 'w') as csvfile:
         fieldnames = transactions[0].keys()

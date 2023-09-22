@@ -1,7 +1,7 @@
 from flask import Flask, request 
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
-from scraper import scrape_benefits, LoginException, ScrapingException
+from scraper import scrape_benefits, LoginException, ScrapingException, scrape_transactions
 import os 
 
 auth = HTTPBasicAuth()
@@ -34,3 +34,23 @@ def get_benefits():
         return {'error': 'Screen scraping failed', 'details': {'error': e.error, 'html_doc': e.html_doc}}, 500
     
     return {'benefits': benefits}, 200
+
+
+@app.route("/transactions", methods=['GET'])
+@auth.login_required
+def get_transactions():
+    for field in ['username', 'password']:
+        if field not in request.json:
+            return {'error': f'Missing field: {field}'}, 400
+
+    try:
+        transactions = scrape_transactions(
+            request.json['username'],
+            request.json['password'],
+        )
+    except LoginException:
+        return {'error': 'Failed to login on behalf of user'}, 500 
+    except ScrapingException as e:
+        return {'error': 'Screen scraping failed', 'details': {'error': e.error, 'html_doc': e.html_doc}}, 500
+    
+    return {'transactions': transactions}, 200
