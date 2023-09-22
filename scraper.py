@@ -7,6 +7,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 import concurrent.futures
+from datetime import datetime 
 
 LOGIN_PAGE_URL = 'https://www.wicconnect.com/wicconnectclient/siteLogonClient.recip?state=NEW%20YORK%20WIC&stateAgencyId=1'
 
@@ -18,7 +19,7 @@ class ScrapingException(Exception):
         self.error = str(error)
         self.html_doc = html_doc
 
-def get_driver(headless=True):
+def _get_driver(headless=True):
     chrome_options = webdriver.ChromeOptions()
     chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN", "")
     if headless:
@@ -29,7 +30,7 @@ def get_driver(headless=True):
     return webdriver.Chrome(service=service, options=chrome_options)
 
 
-def login(driver, username, password):
+def _login(driver, username, password):
     driver.get(LOGIN_PAGE_URL)
     username_input = driver.find_element(By.NAME, "login")
     password_input = driver.find_element(By.NAME, "password")
@@ -41,7 +42,7 @@ def login(driver, username, password):
         EC.presence_of_element_located((By.ID, "printTable"))
     )
 
-def get_benefits_from_html(html_doc):
+def _get_benefits_from_html(html_doc):
     soup = BeautifulSoup(html_doc, 'html.parser')
     tables = soup.find_all('table')
     table = tables[9]
@@ -101,9 +102,8 @@ def _get_month_options(driver):
     month_options = month_input.find_elements(By.TAG_NAME, "option")    
     return month_options
 
-def _get_transactions(driver):
+def _get_transactions(driver, year_idx):
     transactions = []
-    year_idx = 0 
     month_idx = 0
     while True:
         # Select year
@@ -130,16 +130,12 @@ def _get_transactions(driver):
         assert 'future balance' in balance_link.get_attribute('innerHTML').lower()
         balance_link.click()
 
-        # Why isn't this working?!
         WebDriverWait(driver, 3).until(
             EC.url_contains(('main.recip'))
         )
 
         if month_idx < len(month_options) - 1:
             month_idx += 1
-        elif year_idx < len(year_options) - 1:
-            year_idx += 1
-            month_idx = 0
         else:
             break
 
@@ -147,11 +143,11 @@ def _get_transactions(driver):
 
 
 def scrape_benefits(username, password, use_headless_driver=True):
-    driver = get_driver(use_headless_driver)
+    driver = _get_driver(use_headless_driver)
 
     # Log in 
     try:
-        login(driver, username, password)
+        _login(driver, username, password)
     except Exception as e:
         driver.quit()
         raise LoginException(e)
@@ -159,7 +155,7 @@ def scrape_benefits(username, password, use_headless_driver=True):
     # scrape_benefits 
     html_doc = driver.page_source
     try:
-        benefits = get_benefits_from_html(html_doc)
+        benefits = _get_benefits_from_html(html_doc)
     except Exception as e:
         driver.quit()
         raise ScrapingException(error=e, html_doc=html_doc)
@@ -168,18 +164,18 @@ def scrape_benefits(username, password, use_headless_driver=True):
     return benefits
 
 
-def scrape_transactions(username, password, use_headless_driver=True):
-    driver = get_driver(use_headless_driver)
+def _scrape_transactions_for_year(username, password, year_idx, use_headless_driver=True):
+    driver = _get_driver(use_headless_driver)
     # Log in 
     try:
-        login(driver, username, password)
+        _login(driver, username, password)
     except Exception as e:
         driver.quit()
         raise LoginException(e)
     
     # Scrape transactions
     try:
-        transactions = _get_transactions(driver)
+        transactions = _get_transactions(driver, year_idx)
     except Exception as e:
         html_doc = driver.page_source
         driver.quit()
@@ -188,3 +184,11 @@ def scrape_transactions(username, password, use_headless_driver=True):
     driver.quit()
     return transactions
 
+def _flatten(l):
+    return [item for sublist in l for item in sublist]
+
+def scrape_transactions_concurrently(username, password, use_headless_driver=True):
+    year_idxs = list(range(0, datetime.now().year - 2019 + 1))
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        transactions = list(executor.map(lambda x: _scrape_transactions_for_year(username, password, year_idx=x, use_headless_driver=use_headless_driver), year_idxs))
+    return _flatten(transactions)
