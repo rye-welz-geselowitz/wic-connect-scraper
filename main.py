@@ -40,12 +40,6 @@ def scrape(username, password):
             for line in summary_lines:
                 writer.writerow(line)  
 
-    
-    
-
-    print('summary', summary)
-
-
 
 
 if __name__ == '__main__':

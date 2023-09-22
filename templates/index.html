@@ -1,33 +1,56 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
 <style>
 </style>
 <script
 src="https://code.jquery.com/jquery-3.7.1.min.js"
 integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
 crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
 <body>
+<div class="container">
+    
+    <div id="form-container" class="row">
+        <h1>WIC Data Demo</h1>
+        <form id="creds-form" class="col s12">
+            <div class="row">
+                <div class="input-field col s12">
+                    <label for="username">Username:</label><br>
+                    <input type="text" id="username" name="username" required><br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <label for="password">Password</label><br>
+                    <input type="password" id="password" name="password" required><br><br>
+                </div>
+            </div>
 
-<h1>Demo</h1>
+            <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+                <i class="material-icons right">send</i>
+            </button>
+        </form>
+    </div>
 
-<div id="form-container">
-    <form id="creds-form">
-        <label for="username">Username:</label><br>
-        <input type="text" id="username" name="username" required><br>
-        <label for="password">Password</label><br>
-        <input type="password" id="password" name="password" required><br><br>
-        <input type="submit" value="Submit">
-    </form>
-</div>
+    <div id="loading-container" style="display: none;" class="row">
+        <div class="progress">
+            <div class="indeterminate"></div>
+        </div>
+    </div>
 
-<div id="loading-container" style="display: none;">
-    Loading!
-</div>
-
-<div id="results-container" style="display: none;">
-    <h2>Your top items since 2019:</h2>
-    <ul id="top-items-list">
-    </ul>
+    <div id="results-container" style="display: none;" class="row">
+        <h3>Current Benefits</h3>
+        <i>Your current food package includes:</i>
+        <ul id="current-benefits-list" class="collection"></ul>
+        <h3>Top items</h3>
+        <i>The WIC items you've redeemed most frequently are:</i>
+        <ul id="top-items-list" class="collection"></ul>
+    </div>
 </div>
 
 </body>
@@ -47,7 +70,6 @@ crossorigin="anonymous"></script>
             'username': $('#username').val(),
             'password': $('#password').val()
         }
-        console.log('postData', postData)
         $.ajax({
             url: '/transactions-summary',
             type: 'post',
@@ -57,8 +79,26 @@ crossorigin="anonymous"></script>
             success: function(res){
                 topItemsList = $('#top-items-list')
                 res.items.slice(0, 10).forEach((item)=>{
-                    topItemsList.append(`<li><b>${item.item}</b> (${item.quantity} ${item.unit})</li>`)
-                })  
+                    topItemsList.append(`<li class="collection-item"><b>${item.item}</b> (${item.quantity} ${item.unit})</li>`)
+                }) 
+                $.ajax({
+                    url: '/benefits',
+                    type: 'post',
+                    data: JSON.stringify(postData),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function(res){
+                        currentBenefitsList = $('#current-benefits-list')
+                        res.benefits.forEach((b)=>{
+                            currentBenefitsList.append(`<li class="collection-item">${b.remaining} ${b.unit} ${b.name}</li>`)
+                        })  
+                        $('#loading-container').hide()
+                        $('#results-container').show()
+                    },
+                    error: function(res) {
+                        alert(res.text);
+                    }
+                }); 
                 $('#loading-container').hide()
                 $('#results-container').show()
             },

@@ -18,6 +18,18 @@ TEST_BENEFITS = [
         'unit': 'GALLON',
         'issued': 2,
         'remaining': 1
+    },
+    {
+        'name': 'CEREAL',
+        'unit': 'OUNCE',
+        'issued': 36,
+        'remaining': 18
+    },
+    {
+        'name': 'EGGS',
+        'unit': 'DOZEN',
+        'issued': 1,
+        'remaining': 1
     }
 ]
 
