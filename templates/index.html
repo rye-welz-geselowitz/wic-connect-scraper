@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<style>
+</style>
+<script
+src="https://code.jquery.com/jquery-3.7.1.min.js"
+integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+crossorigin="anonymous"></script>
+<body>
+
+<h1>Demo</h1>
+
+<div id="form-container">
+    <form id="creds-form">
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username" required><br>
+        <label for="password">Password</label><br>
+        <input type="password" id="password" name="password" required><br><br>
+        <input type="submit" value="Submit">
+    </form>
+</div>
+
+<div id="loading-container" style="display: none;">
+    Loading!
+</div>
+
+<div id="results-container" style="display: none;">
+    <h2>Your top items since 2019:</h2>
+    <ul id="top-items-list">
+    </ul>
+</div>
+
+</body>
+
+<script>
+    $('#creds-form').submit(function(e){
+        e.preventDefault();
+        submitCreds()
+    });
+
+    function submitCreds(){
+        $('#form-container').hide()
+        $('#loading-container').show()
+        
+
+        postData = {
+            'username': $('#username').val(),
+            'password': $('#password').val()
+        }
+        console.log('postData', postData)
+        $.ajax({
+            url: '/transactions-summary',
+            type: 'post',
+            data: JSON.stringify(postData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(res){
+                topItemsList = $('#top-items-list')
+                res.items.slice(0, 10).forEach((item)=>{
+                    topItemsList.append(`<li><b>${item.item}</b> (${item.quantity} ${item.unit})</li>`)
+                })  
+                $('#loading-container').hide()
+                $('#results-container').show()
+            },
+            error: function(res) {
+                alert(res.text);
+            }
+        });
+    }
+</script>
+</html>
+

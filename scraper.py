@@ -11,6 +11,43 @@ from datetime import datetime
 
 LOGIN_PAGE_URL = 'https://www.wicconnect.com/wicconnectclient/siteLogonClient.recip?state=NEW%20YORK%20WIC&stateAgencyId=1'
 
+DUMMY_CREDS = ('brl', 'bananas')
+TEST_BENEFITS = [
+    {
+        'name': 'MILK',
+        'unit': 'GALLON',
+        'issued': 2,
+        'remaining': 1
+    }
+]
+
+TEST_TRANSACTIONS = [
+    {
+            'date': '01/03/2023',
+            'quantity': 2,
+            'unit': 'CONTAINER',
+            'item': 'GERBER 2FOODS BANANA BLACKBERRY BLUEBERRY 2PK*4OZ',
+            'transaction': 'WIC PURCHASE',
+            'location': 'CTOWN'
+    },
+    {
+            'date': '01/04/2023',
+            'quantity': 1,
+            'unit': 'CONTAINER',
+            'item': 'GERBER 2FOODS BANANA BLACKBERRY BLUEBERRY 2PK*4OZ',
+            'transaction': 'WIC PURCHASE',
+            'location': 'CTOWN'
+    },
+    {
+            'date': '02/04/2023',
+            'quantity': 1.5,
+            'unit': 'GALLON',
+            'item': 'GALLON	LACTAID LACTOSE FREE WHOLE MILK 96OZ',
+            'transaction': 'WIC PURCHASE',
+            'location': 'CTOWN'
+    },
+]
+
 class LoginException(Exception):
     pass
 
@@ -143,6 +180,9 @@ def _get_transactions(driver, year_idx):
 
 
 def scrape_benefits(username, password, use_headless_driver=True):
+    if (username, password) == DUMMY_CREDS:
+        return TEST_BENEFITS
+
     driver = _get_driver(use_headless_driver)
 
     # Log in 
@@ -188,6 +228,9 @@ def _flatten(l):
     return [item for sublist in l for item in sublist]
 
 def scrape_transactions(username, password, use_headless_driver=True):
+    if (username, password) == DUMMY_CREDS:
+        return TEST_TRANSACTIONS
+
     year_idxs = list(range(0, datetime.now().year - 2019 + 1))
     with concurrent.futures.ThreadPoolExecutor() as executor:
         transactions = list(executor.map(lambda x: _scrape_transactions_for_year(username, password, year_idx=x, use_headless_driver=use_headless_driver), year_idxs))
