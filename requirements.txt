@@ -3,3 +3,5 @@ beautifulsoup4==4.12.2
 flask==2.3.3
 flask-httpauth==4.8.0
 gunicorn==21.2.0
+SQLAlchemy==2.0.21
+psycopg2-binary==2.9.7

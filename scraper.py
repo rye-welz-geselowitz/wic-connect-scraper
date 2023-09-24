@@ -60,13 +60,16 @@ TEST_TRANSACTIONS = [
     },
 ]
 
-class LoginException(Exception):
-    pass
+
 
 class ScrapingException(Exception):
     def __init__(self, error, html_doc):
         self.error = str(error)
         self.html_doc = html_doc
+    
+class LoginException(ScrapingException):
+     pass
+
 
 def _get_driver(headless=True):
     chrome_options = webdriver.ChromeOptions()
@@ -201,8 +204,9 @@ def scrape_benefits(username, password, use_headless_driver=True):
     try:
         _login(driver, username, password)
     except Exception as e:
+        html_doc = driver.page_source
         driver.quit()
-        raise LoginException(e)
+        raise LoginException(e, html_doc)
     
     # scrape_benefits 
     html_doc = driver.page_source
@@ -222,8 +226,9 @@ def _scrape_transactions_for_year(username, password, year_idx, use_headless_dri
     try:
         _login(driver, username, password)
     except Exception as e:
+        page_source = driver.page_source
         driver.quit()
-        raise LoginException(e)
+        raise LoginException(e, page_source)
     
     # Scrape transactions
     try:

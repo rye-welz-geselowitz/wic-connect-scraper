@@ -43,6 +43,10 @@ crossorigin="anonymous"></script>
         </div>
     </div>
 
+    <div id="error-container" style="display: none;" class="row">
+        <h2>Sorry, something went wrong!</h2>
+    </div>
+
     <div id="results-container" style="display: none;" class="row">
         <h3>Current Benefits</h3>
         <i>Your current food package includes:</i>
@@ -92,20 +96,21 @@ crossorigin="anonymous"></script>
                         res.benefits.forEach((b)=>{
                             currentBenefitsList.append(`<li class="collection-item">${b.remaining} ${b.unit} ${b.name}</li>`)
                         })  
-                        $('#loading-container').hide()
-                        $('#results-container').show()
                     },
-                    error: function(res) {
-                        alert(res.text);
-                    }
+                    error: displayError
                 }); 
                 $('#loading-container').hide()
                 $('#results-container').show()
             },
-            error: function(res) {
-                alert(res.text);
-            }
+            error: displayError
         });
+    }
+
+    function displayError(res) {
+        console.log(res)
+        $('#loading-container').hide()
+        $('#error-container').append(`<span>${res.status}: ${res.responseJSON['error'] || res.responseText}</span>`)
+        $('#error-container').show()
     }
 </script>
 </html>
