@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy import URL, text
 import os 
 
-DATABASE_URL = os.environ['DATABASE_URL']
+DATABASE_URL = os.environ['DATABASE_URL'].replace('postgres://', 'postgresql://')
 
 engine = create_engine(DATABASE_URL)
 conn = engine.connect()
