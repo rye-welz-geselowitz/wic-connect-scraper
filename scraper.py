@@ -85,7 +85,7 @@ def _get_driver(headless=True):
 
 
 def _login(driver, username, password):
-    logging.info('Logging in')
+    logging.warning('Logging in')
     driver.get(LOGIN_PAGE_URL)
     username_input = driver.find_element(By.NAME, "login")
     password_input = driver.find_element(By.NAME, "password")
@@ -93,7 +93,7 @@ def _login(driver, username, password):
     password_input.send_keys(password)
     login_button = driver.find_element(By.NAME, "login_but")
     login_button.click()
-    logging.info('Clicked the login button')
+    logging.warning('Clicked the login button')
     message_element = WebDriverWait(driver, 5).until(
         EC.presence_of_element_located((By.ID, "printTable"))
     )

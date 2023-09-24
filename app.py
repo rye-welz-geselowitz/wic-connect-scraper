@@ -46,7 +46,7 @@ def get_transactions_summary():
             return {'error': f'Missing field: {field}'}, 400
 
     username = request.json['username']
-    logging.info('Scraping transactions')
+    logging.warning('Scraping transactions')
     try:
         transactions = scrape_transactions(
             username,
