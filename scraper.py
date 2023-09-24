@@ -90,7 +90,7 @@ def _login(driver, username, password):
     password_input.send_keys(password)
     login_button = driver.find_element(By.NAME, "login_but")
     login_button.click()
-    message_element = WebDriverWait(driver, 10).until(
+    message_element = WebDriverWait(driver, 5).until(
         EC.presence_of_element_located((By.ID, "printTable"))
     )
 

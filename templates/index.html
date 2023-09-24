@@ -109,7 +109,7 @@ crossorigin="anonymous"></script>
     function displayError(res) {
         console.log(res)
         $('#loading-container').hide()
-        $('#error-container').append(`<span>${res.status}: ${res.responseJSON['error'] || res.responseText}</span>`)
+        $('#error-container').append(`<span>${res.status}: ${res.hasOwnProperty('responseJSON') ? res.responseJSON['error'] || res.responseText : res.statusText}</span>`)
         $('#error-container').show()
     }
 </script>
