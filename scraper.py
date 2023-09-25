@@ -15,6 +15,8 @@ from scrape_records import (
 )
 from time import sleep 
 
+
+SLEEP_ON_TEST_DATA = bool(int(os.environ.get('SLEEP_ON_TEST_DATA', 1))) 
 LOGIN_PAGE_URL = 'https://www.wicconnect.com/wicconnectclient/siteLogonClient.recip?state=NEW%20YORK%20WIC&stateAgencyId=1'
 
 DUMMY_CREDS = ('brl', 'bananas')
@@ -212,7 +214,8 @@ def _get_transactions(driver, year_idx):
 
 def scrape_benefits(username, password, use_headless_driver=True):
     if (username, password) == DUMMY_CREDS:
-        sleep(2)
+        if SLEEP_ON_TEST_DATA:
+            sleep(2)
         return TEST_BENEFITS
 
     driver = _get_driver(use_headless_driver)
@@ -263,7 +266,8 @@ def _flatten(l):
 
 def scrape_transactions(username, password, use_headless_driver=True):
     if (username, password) == DUMMY_CREDS:
-        sleep(10)
+        if SLEEP_ON_TEST_DATA:
+            sleep(10)
         return TEST_TRANSACTIONS
 
     year_idxs = list(range(0, datetime.now().year - 2019 + 1))
