@@ -75,32 +75,18 @@ crossorigin="anonymous"></script>
             'password': $('#password').val()
         }
         $.ajax({
-            url: '/transactions-summary',
+            url: '/scrape-attempt',
             type: 'post',
             data: JSON.stringify(postData),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function(res){
-                topItemsList = $('#top-items-list')
-                res.items.slice(0, 10).forEach((item)=>{
-                    topItemsList.append(`<li class="collection-item"><b>${item.item}</b> (${item.quantity} ${item.unit})</li>`)
-                }) 
-                $.ajax({
-                    url: '/benefits',
-                    type: 'post',
-                    data: JSON.stringify(postData),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function(res){
-                        currentBenefitsList = $('#current-benefits-list')
-                        res.benefits.forEach((b)=>{
-                            currentBenefitsList.append(`<li class="collection-item">${b.remaining} ${b.unit} ${b.name}</li>`)
-                        })  
-                    },
-                    error: displayError
-                }); 
-                $('#loading-container').hide()
-                $('#results-container').show()
+                const token = res.token;
+                // TODO: Introduce polling here! 
+                setTimeout(function() {
+                    syncScrapedData(token)
+                }, 10000);
+
             },
             error: displayError
         });
@@ -112,6 +98,31 @@ crossorigin="anonymous"></script>
         $('#error-container').append(`<span>${res.status}: ${res.hasOwnProperty('responseJSON') ? res.responseJSON['error'] || res.responseText : res.statusText}</span>`)
         $('#error-container').show()
     }
+
+    function syncScrapedData(token){
+        $.ajax({
+            url: '/scrape-attempt',
+            type: 'get',
+            data: {'token': token},
+            success: function(res){
+                currentBenefitsList = $('#current-benefits-list')
+                res.benefits.forEach((b)=>{
+                    currentBenefitsList.append(`<li class="collection-item">${b.remaining} ${b.unit} ${b.name}</li>`)
+                });
+                topItemsList = $('#top-items-list')
+                res.transactions_summary.slice(0, 10).forEach((item)=>{
+                    topItemsList.append(`<li class="collection-item"><b>${item.item}</b> (${item.quantity} ${item.unit})</li>`)
+                }) 
+                $('#loading-container').hide()
+                $('#results-container').show() 
+            },
+            error: displayError
+        }); 
+            
+    }
+
 </script>
 </html>
+
+
 
