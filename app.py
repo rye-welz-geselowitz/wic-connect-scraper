@@ -6,8 +6,7 @@ import data_presentation
 import logging
 from rq import Queue
 from worker import conn
-import uuid
-from scrape_records import get_scrape_attempt
+from scrape_records import get_scrape_attempt, create_scrape_attempt
 
 q = Queue(connection=conn)
 
@@ -24,20 +23,21 @@ def post_scrape_attempt():
             return {'error': f'Missing field: {field}'}, 400
     username = request.json['username']
     password = request.json['password']
-    token = str(uuid.uuid4())
-    q.enqueue(scrape_all, username, password, token)
-    return {'result': 'Enqueued', 'token': token}, 201
+    scrape_attemept = create_scrape_attempt(username)
+    q.enqueue(scrape_all, username, password, scrape_attemept['token'])
+    return scrape_attemept, 201
 
 
 @app.route("/scrape-attempt", methods=['GET'])
 def get_scrape_attempt_resource():
-    for field in ['token']:
+    for field in ['token', 'username']:
         if field not in request.args:
             return {'error': f'Missing field: {field}'}, 400
     
     scrape_attempt = get_scrape_attempt(request.args['token'])
-    if scrape_attempt is None:
+    if scrape_attempt is None or scrape_attempt['username'] != request.args['username']:
         return {'result': 'Not found'}, 404
+    
     
     scrape_attempt['transactions_summary'] = None
     transactions = scrape_attempt.get('transactions')

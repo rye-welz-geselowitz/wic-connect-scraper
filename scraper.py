@@ -13,6 +13,7 @@ from scrape_records import (
     create_scrape_attempt, record_scrape_success,
     record_scrape_failure
 )
+from time import sleep 
 
 LOGIN_PAGE_URL = 'https://www.wicconnect.com/wicconnectclient/siteLogonClient.recip?state=NEW%20YORK%20WIC&stateAgencyId=1'
 
@@ -203,6 +204,7 @@ def _get_transactions(driver, year_idx):
 
 def scrape_benefits(username, password, use_headless_driver=True):
     if (username, password) == DUMMY_CREDS:
+        sleep(2)
         return TEST_BENEFITS
 
     driver = _get_driver(use_headless_driver)
@@ -253,6 +255,7 @@ def _flatten(l):
 
 def scrape_transactions(username, password, use_headless_driver=True):
     if (username, password) == DUMMY_CREDS:
+        sleep(10)
         return TEST_TRANSACTIONS
 
     year_idxs = list(range(0, datetime.now().year - 2019 + 1))
@@ -261,7 +264,6 @@ def scrape_transactions(username, password, use_headless_driver=True):
     return _flatten(transactions)
 
 def scrape_all(username, password, token):
-    create_scrape_attempt(username, token)
     # TODO: could save time by not logging in twice
     benefits = None
     transactions = None

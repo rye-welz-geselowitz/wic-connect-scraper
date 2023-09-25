@@ -7,6 +7,7 @@ CREATE TABLE scrape_attempts (
     status text not null,
     benefits jsonb,
     transactions jsonb,
+    error_category text,
     error_desc text,
   	html_doc text
 );
