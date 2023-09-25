@@ -60,6 +60,17 @@ crossorigin="anonymous"></script>
 </body>
 
 <script>
+    let pollingIntervalId;
+    let pollRounds = 0;
+    const pollIntervalSeconds = 5;
+    const totalPollRounds = 10; 
+
+
+    const stopPolling = () => {
+        clearInterval(pollingIntervalId);
+    }
+
+
     $('#creds-form').submit(function(e){
         e.preventDefault();
         submitCreds()
@@ -75,43 +86,71 @@ crossorigin="anonymous"></script>
             'password': $('#password').val()
         }
         $.ajax({
-            url: '/transactions-summary',
+            url: '/scrape-attempt',
             type: 'post',
             data: JSON.stringify(postData),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: function(res){
-                topItemsList = $('#top-items-list')
-                res.items.slice(0, 10).forEach((item)=>{
-                    topItemsList.append(`<li class="collection-item"><b>${item.item}</b> (${item.quantity} ${item.unit})</li>`)
-                }) 
-                $.ajax({
-                    url: '/benefits',
-                    type: 'post',
-                    data: JSON.stringify(postData),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function(res){
-                        currentBenefitsList = $('#current-benefits-list')
-                        res.benefits.forEach((b)=>{
-                            currentBenefitsList.append(`<li class="collection-item">${b.remaining} ${b.unit} ${b.name}</li>`)
-                        })  
-                    },
-                    error: displayError
-                }); 
-                $('#loading-container').hide()
-                $('#results-container').show()
-            },
-            error: displayError
+            success: pollScrapedData,
+            error: displayErrorFromResponse
         });
     }
 
-    function displayError(res) {
-        console.log(res)
-        $('#loading-container').hide()
-        $('#error-container').append(`<span>${res.status}: ${res.hasOwnProperty('responseJSON') ? res.responseJSON['error'] || res.responseText : res.statusText}</span>`)
-        $('#error-container').show()
+    function pollScrapedData(res){
+        pollingIntervalId = setInterval(function(){
+            if (pollRounds < totalPollRounds){
+                syncScrapedData(res.token, res.username);
+                pollRounds +=1;
+            } else{
+                stopPolling()
+                displayError('Something went wrong!');
+            }
+        }, pollIntervalSeconds * 1000)
     }
+
+    function displayErrorFromResponse(res) {
+        const message = `${res.status}: ${res.hasOwnProperty('responseJSON') ? res.responseJSON['error'] || res.responseText : res.statusText}`
+        displayError(message);
+    }
+
+    function displayError(message){
+        $('#loading-container').hide()
+        $('#error-container').append(`<span>${message}</span>`)
+        $('#error-container').show()       
+    }
+
+    function syncScrapedData(token, username){
+        $.ajax({
+            url: '/scrape-attempt',
+            type: 'get',
+            data: {'token': token, 'username': username},
+            success: function(res){
+                if(res.status === 'SUCCESS'){
+                    currentBenefitsList = $('#current-benefits-list')
+                    res.benefits.forEach((b)=>{
+                        currentBenefitsList.append(`<li class="collection-item">${b.remaining} ${b.unit} ${b.name}</li>`)
+                    });
+                    topItemsList = $('#top-items-list')
+                    res.transactions_summary.slice(0, 10).forEach((item)=>{
+                        topItemsList.append(`<li class="collection-item"><b>${item.item}</b> (${item.quantity} ${item.unit})</li>`)
+                    }) 
+                    $('#loading-container').hide()
+                    $('#results-container').show() 
+                    stopPolling();
+                    console.log('Stopping polling!')
+                }
+                if(res.status === 'FAILURE'){
+                    displayError(`Something went wrong: ${res.error_category}`)
+                    stopPolling();
+                }
+            },
+            error: displayErrorFromResponse
+        }); 
+            
+    }
+
 </script>
 </html>
+
+
 

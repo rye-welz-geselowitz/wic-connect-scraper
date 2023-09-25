@@ -9,7 +9,11 @@ from bs4 import BeautifulSoup
 import concurrent.futures
 from datetime import datetime 
 import logging
-
+from scrape_records import (
+    create_scrape_attempt, record_scrape_success,
+    record_scrape_failure
+)
+from time import sleep 
 
 LOGIN_PAGE_URL = 'https://www.wicconnect.com/wicconnectclient/siteLogonClient.recip?state=NEW%20YORK%20WIC&stateAgencyId=1'
 
@@ -200,6 +204,7 @@ def _get_transactions(driver, year_idx):
 
 def scrape_benefits(username, password, use_headless_driver=True):
     if (username, password) == DUMMY_CREDS:
+        sleep(2)
         return TEST_BENEFITS
 
     driver = _get_driver(use_headless_driver)
@@ -250,9 +255,37 @@ def _flatten(l):
 
 def scrape_transactions(username, password, use_headless_driver=True):
     if (username, password) == DUMMY_CREDS:
+        sleep(10)
         return TEST_TRANSACTIONS
 
     year_idxs = list(range(0, datetime.now().year - 2019 + 1))
     with concurrent.futures.ThreadPoolExecutor() as executor:
         transactions = list(executor.map(lambda x: _scrape_transactions_for_year(username, password, year_idx=x, use_headless_driver=use_headless_driver), year_idxs))
     return _flatten(transactions)
+
+def scrape_all(username, password, token):
+    # TODO: could save time by not logging in twice
+    benefits = None
+    transactions = None
+    try:
+        benefits = scrape_benefits(username, password)
+        transactions = scrape_transactions(username, password)
+    except LoginException as e:
+        record_scrape_failure(token, 'LOGIN', e.error, e.html_doc, benefits, transactions)
+    except ScrapingException as e:
+        failure_stage = 'BENEFITS' if benefits is None else 'TRANSACTIONS'
+        record_scrape_failure(
+            token, f'SCRAPING_{failure_stage}', e.error, e.html_doc,
+            benefits,
+            transactions
+        )
+    except Exception as e:
+        record_scrape_failure(token, 'UNKNOWN', str(e), None, benefits, transactions)
+    else:
+        record_scrape_success(token, benefits, transactions)
+
+    
+
+
+
+
