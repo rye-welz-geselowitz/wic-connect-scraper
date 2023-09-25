@@ -18,3 +18,10 @@ flask run
 curl -X POST http://127.0.0.1:5000/benefits  -H "Content-Type: application/json" --data-raw '{"username": "test_username", "password": "test_password"}'
 
 curl -X POST http://127.0.0.1:5000/transactions  -H "Content-Type: application/json" --data-raw '{"username": "test_username", "password": "test_password"}'
+
+curl -X POST http://127.0.0.1:5000/scrape  -H "Content-Type: application/json" --data-raw '{"username": "brl", "password": "bananas"}'
+
+
+
+# TODO: finish notes on redis local setup:
+export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES

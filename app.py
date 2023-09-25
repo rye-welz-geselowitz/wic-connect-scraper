@@ -1,16 +1,32 @@
 from flask import Flask, request, render_template 
 from werkzeug.security import generate_password_hash, check_password_hash
-from scraper import scrape_benefits, LoginException, ScrapingException, scrape_transactions
+from scraper import scrape_benefits, LoginException, ScrapingException, scrape_transactions, scrape_all
 import os 
 import data_presentation
 from endpoint_logging import record_error, record_success
 import logging
+from rq import Queue
+from worker import conn
+import uuid
+
+q = Queue(connection=conn)
 
 app = Flask(__name__)
 
 @app.route("/")
 def get_index():
     return render_template('index.html')
+
+@app.route('/scrape', methods=['POST'])
+def scrape():
+    for field in ['username', 'password']:
+        if field not in request.json:
+            return {'error': f'Missing field: {field}'}, 400
+    username = request.json['username']
+    password = request.json['password']
+    token = str(uuid.uuid4())
+    q.enqueue(scrape_all, username, password, token)
+    return {'result': 'Enqueued', 'token': token}, 201
 
 
 @app.route("/benefits", methods=['POST'])

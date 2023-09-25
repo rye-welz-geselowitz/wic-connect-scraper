@@ -5,3 +5,4 @@ flask-httpauth==4.8.0
 gunicorn==21.2.0
 SQLAlchemy==2.0.21
 psycopg2-binary==2.9.7
+rq==1.15.1
