@@ -32,7 +32,7 @@ crossorigin="anonymous"></script>
         <div class="row">
             <div class="input-field col s12">
                 <label for="email">Your Email:</label><br>
-                <input type="text" id="email" name="email" required><br>
+                <input type="email" id="email" name="email" required><br>
             </div>               
         </div>
         <div class="col s12">
@@ -73,16 +73,38 @@ crossorigin="anonymous"></script>
         <h2>Sorry, something went wrong!</h2>
     </div>
 
-    <div id="results-container" style="display: none;" class="row">
+    <div id="results-container" style="display: none;" class="row responsive-table">
         <h3>Current Benefits</h3>
-        <i>Your current food package includes:</i>
-        <ul id="current-benefits-list" class="collection"></ul>
+        <table class="striped">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Unit</th>
+                    <th>Remaining</th>
+                    <th>Issued</th>
+                </tr>
+              </thead>
+              <tbody id="current-benefits-list">
+
+              </tbody>
+        </table>
         <h3>CVB Redeemed</h3>
         <i>Total value of fruits and vegetables redeemed since 2019:</i>
         <ul id="cvb-total" class="collection"></ul>
         <h3>Favorite items</h3>
         <i>The WIC items you've redeemed most frequently since 2019:</i>
-        <ul id="top-items-list" class="collection"></ul>
+        <table class="striped">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Times Purchased</th>
+                    <th>Total Amount Purchased</th>
+                </tr>
+              </thead>
+              <tbody id="top-items-list">
+
+              </tbody>
+        </table>
     </div>
 </div>
 
@@ -158,11 +180,11 @@ crossorigin="anonymous"></script>
                 if(res.status === 'SUCCESS'){
                     currentBenefitsList = $('#current-benefits-list')
                     res.benefits.forEach((b)=>{
-                        currentBenefitsList.append(`<li class="collection-item">${b.remaining} ${b.unit} ${b.name}</li>`)
+                        currentBenefitsList.append(`<tr><td>${b.name}</td><td>${b.unit}</td> <td>${b.remaining}</td><td>${b.issued}</td></tr>`)
                     });
                     topItemsList = $('#top-items-list')
                     res.transactions_summary.slice(0, 10).forEach((item)=>{
-                        topItemsList.append(`<li class="collection-item"><b>${item.item}</b> (${item.quantity} ${item.unit})</li>`)
+                        topItemsList.append(`<tr><td>${item.item}</td><td>${item.times_purchased}</td> <td>${item.quantity} ${item.unit}</td></tr>`)
                     }) 
                     $('#cvb-total').append(`<li class="collection-item">$${res.cvb_total}</lia>`)
                     $('#loading-container').hide()
