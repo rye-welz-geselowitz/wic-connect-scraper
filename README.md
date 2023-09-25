@@ -11,19 +11,23 @@ pip install -r requirements.txt
 ### Run script
 python -m main
 
-### Run server locally
+### Run locally
+
+#### Run server
+export DATABASE_URL='your-db-url'
 flask run
 
-### Sample curl request
-curl -X POST http://127.0.0.1:5000/benefits  -H "Content-Type: application/json" --data-raw '{"username": "test_username", "password": "test_password"}'
+#### Run redis server
+redis-server
 
-curl -X POST http://127.0.0.1:5000/transactions  -H "Content-Type: application/json" --data-raw '{"username": "test_username", "password": "test_password"}'
-
-curl -X POST http://127.0.0.1:5000/scrape  -H "Content-Type: application/json" --data-raw '{"username": "brl", "password": "bananas"}'
-
-
-curl -X GET 'http://127.0.0.1:5000/scrape-attempt?token=4b14c7aa-37d0-4495-8101-d7b3b70b9a1c'
-
-
-# TODO: finish notes on redis local setup:
+#### Run worker
+export DATABASE_URL='your-db-url'
 export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+python worker.py
+
+
+### Sample curl request
+curl -X POST http://127.0.0.1:5000/scrape-attempt  -H "Content-Type: application/json" --data-raw '{"username": "brl", "password": "bananas"}'
+
+
+curl -X GET 'http://127.0.0.1:5000/scrape-attempt?token=0c419b28-119f-49e6-87ad-9036a4ee67da&username=brl'
