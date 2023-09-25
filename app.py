@@ -3,7 +3,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from scraper import scrape_benefits, LoginException, ScrapingException, scrape_transactions, scrape_all
 import os 
 import data_presentation
-from endpoint_logging import record_error, record_success
 import logging
 from rq import Queue
 from worker import conn
