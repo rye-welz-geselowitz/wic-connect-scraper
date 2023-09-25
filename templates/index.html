@@ -192,7 +192,16 @@ crossorigin="anonymous"></script>
                     stopPolling();
                 }
                 if(res.status === 'FAILURE'){
-                    displayError(`Something went wrong: ${res.error_category}`)
+                    if(res.error_category == 'LOGIN'){
+                        displayError(`Those credentials are invalid. Please double check the credentials you use to login at <a href='https://www.wicconnect.com/wicconnectclient/siteLogonClient.recip?state=NEW%20YORK%20WIC&stateAgencyId=1' target="_blank">WIC Connect</a> and try again.`)
+                    }
+                    else if (['SCRAPING_BENEFITS', 'SCRAPING_TRANSACTIONS'].includes(res.error_category)){
+                        displayError(`Looks like our tech encountered a problem. Thanks for helping us test!`)
+                    }
+                    else{
+                        displayError(`Unexpected error: ${res.error_category}`)
+                    }
+
                     stopPolling();
                 }
             },
