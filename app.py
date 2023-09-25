@@ -30,12 +30,12 @@ def post_scrape_attempt():
 
 @app.route("/scrape-attempt", methods=['GET'])
 def get_scrape_attempt_resource():
-    for field in ['token', 'username']:
+    for field in ['token']:
         if field not in request.args:
             return {'error': f'Missing field: {field}'}, 400
     
     scrape_attempt = get_scrape_attempt(request.args['token'])
-    if scrape_attempt is None or scrape_attempt['username'] != request.args['username']:
+    if scrape_attempt is None:
         return {'result': 'Not found'}, 404
     
     
