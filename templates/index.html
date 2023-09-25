@@ -105,6 +105,7 @@ crossorigin="anonymous"></script>
             type: 'get',
             data: {'token': token},
             success: function(res){
+                // TODO: handle displaying scrape error
                 currentBenefitsList = $('#current-benefits-list')
                 res.benefits.forEach((b)=>{
                     currentBenefitsList.append(`<li class="collection-item">${b.remaining} ${b.unit} ${b.name}</li>`)
