@@ -18,12 +18,13 @@ def get_index():
 
 @app.route('/scrape-attempt', methods=['POST'])
 def post_scrape_attempt():
-    for field in ['username', 'password']:
+    for field in ['username', 'password', 'email']:
         if field not in request.json:
             return {'error': f'Missing field: {field}'}, 400
     username = request.json['username']
     password = request.json['password']
-    scrape_attemept = create_scrape_attempt(username)
+    email = request.json['email']
+    scrape_attemept = create_scrape_attempt(email)
     q.enqueue(scrape_all, username, password, scrape_attemept['token'])
     return scrape_attemept, 201
 

@@ -29,23 +29,31 @@ crossorigin="anonymous"></script>
     
     <div id="form-container" class="row">
         <h1>WIC Dashboard [Demo]</h1>
-        <p>   
-            To view your WIC benefits and shopping history, enter your <a href='https://www.wicconnect.com/wicconnectclient/siteLogonClient.recip?state=NEW%20YORK%20WIC&stateAgencyId=1' target="_blank">WIC Connect</a> credentials. We will not store your password.
-        </p>
+        <div class="row">
+            <div class="input-field col s12">
+                <label for="email">Your Email:</label><br>
+                <input type="text" id="email" name="email" required><br>
+            </div>               
+        </div>
+        <div class="col s12">
+            <p>
+                To view your WIC benefits and shopping history, your <a href='https://www.wicconnect.com/wicconnectclient/siteLogonClient.recip?state=NEW%20YORK%20WIC&stateAgencyId=1' target="_blank">WIC Connect</a> credentials.
+                <b>We will not store your credentials</b> or use them for any purposes other than pulling your WIC data.
+            </p>
+        </div>
         <form id="creds-form" class="col s12">
             <div class="row">
                 <div class="input-field col s12">
-                    <label for="username">Username:</label><br>
+                    <label for="username">WIC Connect Username:</label><br>
                     <input type="text" id="username" name="username" required><br>
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col s12">
-                    <label for="password">Password</label><br>
+                    <label for="password">WIC Connect Password</label><br>
                     <input type="password" id="password" name="password" required><br><br>
                 </div>
             </div>
-
             <button class="btn waves-effect waves-light" type="submit" name="action">Submit
                 <i class="material-icons right">send</i>
             </button>
@@ -104,7 +112,8 @@ crossorigin="anonymous"></script>
 
         postData = {
             'username': $('#username').val(),
-            'password': $('#password').val()
+            'password': $('#password').val(),
+            'email': $('#email').val()
         }
         $.ajax({
             url: '/scrape-attempt',
