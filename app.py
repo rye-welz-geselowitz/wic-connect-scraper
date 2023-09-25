@@ -40,8 +40,11 @@ def get_scrape_attempt_resource():
     
     
     scrape_attempt['transactions_summary'] = None
+    scrape_attempt['cvb_total'] = None
+
     transactions = scrape_attempt.get('transactions')
     if transactions:
         scrape_attempt['transactions_summary'] = data_presentation.get_transactions_summary(transactions)
+        scrape_attempt['cvb_total'] = data_presentation.get_cvb_total(transactions)
     
     return scrape_attempt, 200

@@ -64,6 +64,14 @@ TEST_TRANSACTIONS = [
             'transaction': 'WIC PURCHASE',
             'location': 'CTOWN'
     },
+    {
+            'date': '02/04/2023',
+            'quantity': 2.01,
+            'unit': 'CASH VALUE BENEFIT(CVB)',
+            'item': 'BANANAS; YELLOW',
+            'transaction': 'WIC PURCHASE',
+            'location': 'CTOWN'
+    },
 ]
 
 
