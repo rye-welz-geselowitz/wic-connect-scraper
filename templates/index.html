@@ -26,19 +26,75 @@ crossorigin="anonymous"></script>
 
 <body>
 <div class="container">
+    <div id="intro" class="row">
+        <div class="col s12">
+            <h1>WIC Dashboard [Demo]</h1>
+            <form id="account-check-form">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <label for="email">Your Email:</label><br>
+                        <input type="email" id="email" name="email" required><br>
+                    </div>               
+                </div>
+                <div class="row">
+                    <p>
+                        Do you have a <a href='https://www.wicconnect.com/wicconnectclient/siteLogonClient.recip?state=NEW%20YORK%20WIC&stateAgencyId=1' target="_blank">WIC Connect</a> account?
+                        <i>(**Please note, this is NOT the same as a WIC2Go mobile application account.)</i>
+                    </p>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <label>
+                        <input name="account-check" value="no" type="radio" checked />
+                        <span>No</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <label>
+                        <input name="account-check" value="yes" type="radio"  />
+                        <span>Yes</span>
+                        </label>
+                    </div>
     
-    <div id="form-container" class="row">
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <button class="btn waves-effect waves-light" type="submit" name="action">Continue
+                            <i class="material-icons right">send</i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="no-account" class="row" style="display: none;">
+        <div class="col s12">
+            <p>
+                Please <a href="https://www.wicconnect.com/wicconnectclient/clientcreate.recip" target="_blank">create a WIC Connect account</a>
+            </p>
+            <form id="create-account-form">
+                <p>
+                <label>
+                    <input type="checkbox" required/>
+                    <span>I have created a WIC Connect account.</span>
+                </label>
+                </p>
+                <button class="btn waves-effect waves-light" type="submit" name="action">Continue
+                    <i class="material-icons right">send</i>
+                </button>
+            </form>
+        </div>
+    </div>
+    <div id="form-container" class="row" style="display: none;">
         <h1>WIC Dashboard [Demo]</h1>
         <form id="creds-form" class="col s12">
-            <div class="row">
-                <div class="input-field col s12">
-                    <label for="email">Your Email:</label><br>
-                    <input type="email" id="email" name="email" required><br>
-                </div>               
-            </div>
             <div class="col s12">
                 <p>
-                    To view your WIC benefits and shopping history, your <a href='https://www.wicconnect.com/wicconnectclient/siteLogonClient.recip?state=NEW%20YORK%20WIC&stateAgencyId=1' target="_blank">WIC Connect</a> credentials.
+                    To view your WIC benefits and shopping history, enter your <a href='https://www.wicconnect.com/wicconnectclient/siteLogonClient.recip?state=NEW%20YORK%20WIC&stateAgencyId=1' target="_blank">WIC Connect</a> credentials. (<b>NOTE</b>: These are <b>not</b> the same as your WIC2Go app credentials!) 
+                </p>
+                <p>
                     <b>We will not store your credentials</b>, but we may store your benefits and shopping history for research purposes.
                 </p>
             </div>
@@ -121,6 +177,23 @@ crossorigin="anonymous"></script>
         clearInterval(pollingIntervalId);
     }
 
+    $('#account-check-form').submit(function(e){
+        e.preventDefault();
+        const value = $('input[name="account-check"]:checked').val();
+        $('#intro').hide()
+        if(value === "no"){
+            $('#no-account').show()
+        }
+        else{
+            $('#form-container').show()
+        }
+    });
+
+    $('#create-account-form').submit(function(e){
+        e.preventDefault();
+        $('#no-account').hide()
+        $('#form-container').show()
+    });
 
     $('#creds-form').submit(function(e){
         e.preventDefault();
@@ -193,7 +266,7 @@ crossorigin="anonymous"></script>
                 }
                 if(res.status === 'FAILURE'){
                     if(res.error_category == 'LOGIN'){
-                        displayError(`Those credentials are invalid. Please double check the credentials you use to login at <a href='https://www.wicconnect.com/wicconnectclient/siteLogonClient.recip?state=NEW%20YORK%20WIC&stateAgencyId=1' target="_blank">WIC Connect</a> and try again.`)
+                        displayError(`Those credentials are invalid. Please double check the credentials you use to login at <a href='https://www.wicconnect.com/wicconnectclient/siteLogonClient.recip?state=NEW%20YORK%20WIC&stateAgencyId=1' target="_blank">WIC Connect</a> and try again. (These are NOT the same as your WIC2Go app credentials.)`)
                     }
                     else if (['SCRAPING_BENEFITS', 'SCRAPING_TRANSACTIONS'].includes(res.error_category)){
                         displayError(`Looks like our tech encountered a problem. Thanks for helping us test!`)
