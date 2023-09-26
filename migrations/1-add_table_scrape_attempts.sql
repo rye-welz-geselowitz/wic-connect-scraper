@@ -4,6 +4,7 @@ CREATE TABLE scrape_attempts (
     username text not null,
     token text not null,
 	when_created timestamp NOT NULL default now(),
+    when_updated timestamp default now(),
     status text not null,
     benefits jsonb,
     transactions jsonb,

@@ -23,7 +23,8 @@ SET
     html_doc=:html_doc,
     benefits=:benefits,
     transactions=:transactions,
-    error_category=:error_category
+    error_category=:error_category,
+    when_updated=now()
 WHERE token=:token;
 COMMIT;"""
 
