@@ -17,6 +17,7 @@ from scrape_records import (
 from time import sleep 
 from typing import Dict, Any, List, Optional
 from selenium.webdriver.remote.webelement import WebElement
+from decimal import Decimal as D
 
 SLEEP_ON_TEST_DATA = bool(int(os.environ.get('SLEEP_ON_TEST_DATA', 1))) 
 LOGIN_PAGE_URL = 'https://www.wicconnect.com/wicconnectclient/siteLogonClient.recip?state=NEW%20YORK%20WIC&stateAgencyId=1'
@@ -129,8 +130,8 @@ def _get_benefits_from_html(html_doc: str) -> List[Dict[Any, Any]]:
         benefit = {
             'name': tds[-4].text.strip(),
             'unit': tds[-3].text,
-            'issued': float(tds[-2].text),
-            'remaining': float(tds[-1].text)
+            'issued': D(tds[-2].text),
+            'remaining': D(tds[-1].text)
         }
         benefits.append(benefit)
     
@@ -151,7 +152,7 @@ def _get_transactions_from_html(html_doc: str) -> List[Dict[Any, Any]]:
         tds = tr.find_all('td')
         transaction = {
             'date': tds[0].text.strip(),
-            'quantity': float(tds[1].text.strip()),
+            'quantity': D(tds[1].text.strip()),
             'unit': tds[2].text.strip(),
             'item': tds[3].text.strip(),
             'transaction': tds[4].text.strip(),

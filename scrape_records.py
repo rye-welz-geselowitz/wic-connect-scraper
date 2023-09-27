@@ -5,6 +5,7 @@ import os
 import json 
 import uuid
 from typing import Dict, Any, List, Optional 
+import decimal 
 
 DATABASE_URL = os.environ['DATABASE_URL'].replace('postgres://', 'postgresql://')
 
@@ -32,6 +33,13 @@ COMMIT;"""
 GET_SCRAPE_ATTEMPT = """
 SELECT * from scrape_attempts where token=:token
 """
+
+class DecimalEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, decimal.Decimal):
+            return str(o)
+        return super().default(o)
+
 def create_scrape_attempt(username: str) -> Dict[Any, Any]:
     token = str(uuid.uuid4())
     insert_statement =  text(INSERT_SCRAPE_ATTEMPT)
@@ -44,8 +52,8 @@ def record_scrape_success(token: str, benefits: List[Dict[Any, Any]], transactio
     update_statement =  text(UPDATE_SCRAPE_ATTEMPT)
     conn.execute(update_statement, {
         'token': token, 'status': 'SUCCESS', 'error_desc': None, 'error_category': None,
-        'html_doc': None, 'benefits': json.dumps(benefits),
-        'transactions': json.dumps(transactions)})
+        'html_doc': None, 'benefits': json.dumps(benefits, cls=DecimalEncoder),
+        'transactions': json.dumps(transactions, cls=DecimalEncoder)})
 
 def record_scrape_failure(
     token: str,
@@ -58,8 +66,8 @@ def record_scrape_failure(
     update_statement = text(UPDATE_SCRAPE_ATTEMPT)
     conn.execute(update_statement, {
         'token': token, 'status': f'FAILURE', 'error_category': error_category, 'error_desc': error_desc,
-        'html_doc': html_doc, 'benefits': json.dumps(benefits),
-        'transactions': json.dumps(transactions)}) 
+        'html_doc': html_doc, 'benefits': json.dumps(benefits, cls=DecimalEncoder),
+        'transactions': json.dumps(transactions, cls=DecimalEncoder)}) 
 
 def get_scrape_attempt(token: str) -> Optional[Dict[Any, Any]]:
     get_statement = text(GET_SCRAPE_ATTEMPT)
@@ -68,4 +76,18 @@ def get_scrape_attempt(token: str) -> Optional[Dict[Any, Any]]:
     if len(items) == 0:
         return None
     assert len(items) == 1 
-    return items[0]
+    attempt = items[0]
+
+    # Silly nonsense I'm doing because I'm not just using SQLAlchemy models oops
+    transactions = attempt['transactions']
+    if transactions:
+        for transaction in attempt['transactions']:
+            transaction['quantity'] = decimal.Decimal(transaction['quantity'])
+
+    benefits = attempt['benefits']
+    if benefits:
+        for benefit in benefits:
+            benefit['issued'] = decimal.Decimal(benefit['issued'])
+            benefit['remaining'] = decimal.Decimal(benefit['remaining'])
+
+    return attempt
