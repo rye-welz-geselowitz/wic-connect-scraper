@@ -31,3 +31,6 @@ curl -X POST http://127.0.0.1:5000/scrape-attempt  -H "Content-Type: application
 
 
 curl -X GET 'http://127.0.0.1:5000/scrape-attempt?token=0c419b28-119f-49e6-87ad-9036a4ee67da&username=brl'
+
+## Run mypy
+```mypy app.py```

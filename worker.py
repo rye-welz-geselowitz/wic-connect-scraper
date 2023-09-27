@@ -7,7 +7,7 @@ listen = ['high', 'default', 'low']
 
 redis_url = os.getenv('REDIS_URL', 'redis://localhost:6379')
 
-conn = redis.from_url(redis_url)
+conn = redis.from_url(redis_url) # type: ignore
 
 if __name__ == '__main__':
     with Connection(conn):

@@ -1,4 +1,6 @@
-def get_transactions_summary(transactions):
+from typing import List, Dict, Any
+
+def get_transactions_summary(transactions: List[Dict[Any, Any]]) -> List[Dict[Any, Any]]:
     tx_dict = {}
     for tx in transactions:
         key = (tx['item'], tx['unit']) 
@@ -19,7 +21,7 @@ def get_transactions_summary(transactions):
     )
     return sorted_items
 
-def get_cvb_total(transactions):
+def get_cvb_total(transactions: List[Dict[Any, Any]]) -> float:
     total = 0
     for tx in transactions:
         if 'CASH VALUE BENEFIT' in tx['unit']:

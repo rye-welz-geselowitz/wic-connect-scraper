@@ -1,11 +1,12 @@
 from selenium.webdriver.chrome.options import Options
 import os
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.ui import WebDriverWait # type: ignore
 from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
+from bs4.element import Tag
 import concurrent.futures
 from datetime import datetime 
 import logging
@@ -14,7 +15,8 @@ from scrape_records import (
     record_scrape_failure
 )
 from time import sleep 
-
+from typing import Dict, Any, List
+from selenium.webdriver.remote.webelement import WebElement
 
 SLEEP_ON_TEST_DATA = bool(int(os.environ.get('SLEEP_ON_TEST_DATA', 1))) 
 LOGIN_PAGE_URL = 'https://www.wicconnect.com/wicconnectclient/siteLogonClient.recip?state=NEW%20YORK%20WIC&stateAgencyId=1'
@@ -79,7 +81,7 @@ TEST_TRANSACTIONS = [
 
 
 class ScrapingException(Exception):
-    def __init__(self, error, html_doc):
+    def __init__(self, error: Exception, html_doc: str) -> None:
         self.error = str(error)
         self.html_doc = html_doc
     
@@ -87,18 +89,18 @@ class LoginException(ScrapingException):
      pass
 
 
-def _get_driver(headless=True):
+def _get_driver(headless: bool=True) -> webdriver.Chrome:
     chrome_options = webdriver.ChromeOptions()
     chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN", "")
     if headless:
-        chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--headless") # type: ignore
+    chrome_options.add_argument("--disable-dev-shm-usage") # type: ignore
+    chrome_options.add_argument("--no-sandbox") # type: ignore
     service = Service(executable_path=os.environ.get("CHROMEDRIVER_PATH"))
     return webdriver.Chrome(service=service, options=chrome_options)
 
 
-def _login(driver, username, password):
+def _login(driver: webdriver.Chrome, username: str, password: str) -> None:
     logging.warning('Logging in')
     driver.get(LOGIN_PAGE_URL)
     username_input = driver.find_element(By.NAME, "login")
@@ -112,7 +114,7 @@ def _login(driver, username, password):
         EC.presence_of_element_located((By.ID, "printTable"))
     )
 
-def _get_benefits_from_html(html_doc):
+def _get_benefits_from_html(html_doc: str) -> List[Dict[Any, Any]]:
     soup = BeautifulSoup(html_doc, 'html.parser')
     tables = soup.find_all('table')
     table = tables[9]
@@ -132,13 +134,15 @@ def _get_benefits_from_html(html_doc):
     
     return benefits
 
-def _get_transactions_from_html(html_doc):
+def _get_transactions_from_html(html_doc: str) -> List[Dict[Any, Any]]:
     soup = BeautifulSoup(html_doc, 'html.parser')
     table = soup.find('table', class_='sort-table')
     if table is None:
         return []
 
     transactions = []
+
+    assert isinstance(table, Tag)
 
     trs = table.find_all('tr', attrs={'class': ['RowEven', 'RowOdd']})
     for tr in trs:
@@ -156,26 +160,26 @@ def _get_transactions_from_html(html_doc):
     return transactions
 
 
-def _get_year_options(driver):
+def _get_year_options(driver: webdriver.Chrome) -> List[WebElement]:
     year_input = driver.find_element(By.NAME, "year")
     year_input.click()
     year_options = year_input.find_elements(By.TAG_NAME, "option")  
     return year_options
 
-def _get_month_options(driver):
+def _get_month_options(driver: webdriver.Chrome) -> List[WebElement]:  
     month_input = driver.find_element(By.NAME, "month")
     month_input.click()
     month_options = month_input.find_elements(By.TAG_NAME, "option")    
     return month_options
 
-def _get_benefits_expiration_from_html(html_doc):
+def _get_benefits_expiration_from_html(html_doc: str) -> datetime:
     soup = BeautifulSoup(html_doc, 'html.parser')
     tables = soup.find_all('table')
     table = tables[8]
     tds = table.find_all('td')
     return datetime.strptime(tds[2].text, '%m/%d/%Y')
 
-def _get_transactions(driver, year_idx):
+def _get_transactions(driver: webdriver.Chrome, year_idx: int) -> List[Dict[Any, Any]]:
     transactions = []
     month_idx = 0
     while True:
@@ -200,7 +204,7 @@ def _get_transactions(driver, year_idx):
 
         menu_links = driver.find_elements(By.CLASS_NAME, "menu_link")
         balance_link = menu_links[0]
-        assert 'future balance' in balance_link.get_attribute('innerHTML').lower()
+        assert 'future balance' in (balance_link.get_attribute('innerHTML') or '').lower()
         balance_link.click()
 
         WebDriverWait(driver, 3).until(
@@ -215,7 +219,7 @@ def _get_transactions(driver, year_idx):
     return transactions
 
 
-def scrape_benefits(username, password, use_headless_driver=True):
+def scrape_benefits(username: str, password: str, use_headless_driver:bool=True) -> List[Dict[Any, Any]]:
     if (username, password) == DUMMY_CREDS:
         if SLEEP_ON_TEST_DATA:
             sleep(2)
@@ -243,7 +247,7 @@ def scrape_benefits(username, password, use_headless_driver=True):
     return benefits
 
 
-def _scrape_transactions_for_year(username, password, year_idx, use_headless_driver=True):
+def _scrape_transactions_for_year(username: str, password: str, year_idx: int, use_headless_driver: bool=True) -> List[Dict[Any, Any]]:
     driver = _get_driver(use_headless_driver)
     # Log in 
     try:
@@ -264,10 +268,10 @@ def _scrape_transactions_for_year(username, password, year_idx, use_headless_dri
     driver.quit()
     return transactions
 
-def _flatten(l):
+def _flatten(l: List[List[Any]]) -> List[Any]:
     return [item for sublist in l for item in sublist]
 
-def scrape_transactions(username, password, use_headless_driver=True):
+def scrape_transactions(username: str, password: str, use_headless_driver: bool=True) -> List[Dict[Any, Any]]:
     if (username, password) == DUMMY_CREDS:
         if SLEEP_ON_TEST_DATA:
             sleep(10)
@@ -278,7 +282,7 @@ def scrape_transactions(username, password, use_headless_driver=True):
         transactions = list(executor.map(lambda x: _scrape_transactions_for_year(username, password, year_idx=x, use_headless_driver=use_headless_driver), year_idxs))
     return _flatten(transactions)
 
-def scrape_all(username, password, token):
+def scrape_all(username: str, password: str, token: str) -> None:
     # TODO: could save time by not logging in twice
     benefits = None
     transactions = None
