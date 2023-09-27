@@ -1,0 +1,638 @@
+<html><head><script src="/tillious-at-Thane-then-La-Doct-abuse-Which-I-Sir" async=""></script>
+	<title>Transaction History Search </title>
+	<script language="JavaScript" type="text/javascript" src="/wicconnectclient/scripts/sortabletable.js"></script>
+	<link rel="stylesheet" type="text/css" href="/wicconnectclient/scripts/sortabletable.css">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"><meta name="DESCRIPTION" content="Check your transaction summary and card balance"><meta name="RATING" content="mature"><script language="JavaScript" type="text/javascript" src="/wicconnectclient/scripts/recipient_jscript.js"></script><script language="JavaScript" type="text/javascript" src="/wicconnectclient/scripts/dom.js"></script><script language="JavaScript" type="text/javascript" src="/wicconnectclient/scripts/menu.js"></script><script language="JavaScript" type="text/javascript" src="/wicconnectclient/scripts/sortabletable.js"></script><script language="JavaScript" type="text/javascript" src="/wicconnectclient/scripts/jquery.js"></script><link rel="stylesheet" type="text/css" href="/wicconnectclient/scripts/recipient_style.css"><link rel="stylesheet" type="text/css" href="/wicconnectclient/scripts/eppic.css" media="screen"><script type="text/javascript">
+<!--
+
+function newImage(arg) {
+	if (document.images) {
+		rslt = new Image();
+		rslt.src = arg;
+		return rslt;
+	}
+}
+
+function changeImages() {
+	if (document.images && (preloadFlag == true)) {
+		for (var i=0; i<changeImages.arguments.length; i+=2) {
+			document[changeImages.arguments[i]].src = changeImages.arguments[i+1];
+		}
+	}
+}
+
+var preloadFlag = false;
+function preloadImages() {
+	if (document.images) {
+		app_main_menu_pass_over = newImage("/wicconnectclient/img/app_main_menu_pass_over.jpg");
+		app_main_menu_log_over = newImage("/wicconnectclient/img/app_main_menu_log_over.jpg");
+		app_search_button_over = newImage("/wicconnectclient/img/app_search_button_over.gif");
+		preloadFlag = true;
+	}
+}
+
+// -->
+</script></head>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<body bgcolor="#FFFFFF" onload="preloadImages();" topmargin="0" marginwidth="0" marginheight="0">
+<center>
+
+<table bgcolor="#EDF7F1" width="819" border="0" cellpadding="0" cellspacing="0">
+	<tbody><tr> 
+       
+    	 <td style="background-repeat: no-repeat; background-image: url(/wicconnectclient/img/app_main_header_wic.jpg)">
+    	 
+            <table width="819" border="0" height="81" cellspacing="0" cellpadding="0">
+			  <tbody><tr>
+				<td><img src="/wicconnectclient/img/dot1.gif" width="719" height="1" border="0"></td>
+				<td><img src="/wicconnectclient/img/dot1.gif" width="100" height="1" border="0"></td>
+			  </tr>
+			  <tr>
+				<td>&nbsp;</td>
+				<td><a href="/wicconnectclient/main.recip">
+                    <img src="/wicconnectclient/imageLoad.do" style="max-height: 81px; max-width: 110px;" border="0" alt="Go to Main page">
+                </a></td>
+			  </tr>
+			</tbody></table>
+		</td>
+	</tr>
+<!-- end of header -->
+	<tr>
+		
+    	<td style="background-repeat: no-repeat; background-image: url(/wicconnectclient/img/app_main_menu.jpg)">
+    	
+			<table width="819" height="105" border="0" cellpadding="0" cellspacing="0">
+				<tbody><tr>
+					<td><img src="/wicconnectclient/img/dot1.gif" width="10" height="10"></td>
+					<td><img src="/wicconnectclient/img/dot1.gif" width="216" height="10"></td>
+					<td><img src="/wicconnectclient/img/dot1.gif" width="17" height="10"></td>
+					<td><img src="/wicconnectclient/img/dot1.gif" width="217" height="10"></td>
+					<td><img src="/wicconnectclient/img/dot1.gif" width="359" height="10"></td>
+				</tr>
+				<tr>
+					<td><img src="/wicconnectclient/img/dot1.gif" width="10" height="20"></td>
+					<td><img src="/wicconnectclient/img/dot1.gif" width="216" height="20"></td>
+					<td><img src="/wicconnectclient/img/dot1.gif" width="17" height="20"></td>
+					<td><img src="/wicconnectclient/img/dot1.gif" width="217" height="20"></td>
+					<td>
+						<a href="main.recip" class="menu_link" style="text-decoration:none;margin-left: 5">
+							<span>
+								Current &amp; Future Balance
+							</span>
+						</a>
+						<!-- 
+						<a href="notificationAlert.recip" class="menu_link" style="text-decoration:none;margin-left: 12">
+							<span>
+								Notification & Alerts
+							</span>
+						</a>
+						 -->
+						 <a href="recipcards.recip" class="menu_link" style="text-decoration:none;margin-left: 12">
+							<span>
+								CHANGE PIN
+							</span>
+						</a>
+					</td>
+				</tr>
+				<tr>
+					<td><img src="/wicconnectclient/img/dot1.gif" width="10" height="75"></td>
+					<td width="216" align="right" height="75">
+			            <form name="stmtSearchForm" method="post" action="/wicconnectclient/trxhistory.recip">
+			
+						<input type="hidden" name="type" value="1">
+						<input type="hidden" name="reportStartDate" value="1900-01-01">
+						<input type="hidden" name="reportEndDate" value="1900-01-01">
+					<table width="220" border="0" cellspacing="0" cellpadding="0">
+					  <tbody><tr>
+						<td><select name="month">
+                         <option value="0">Jan
+                         </option><option value="1">Feb
+                         </option><option value="2">Mar
+                         </option><option value="3">Apr
+                         </option><option value="4">May
+                         </option><option value="5">Jun
+                         </option><option value="6">Jul
+                         </option><option value="7">Aug
+                         </option><option value="8">Sep
+                         </option><option value="9">Oct
+                        </option><option value="10">Nov
+                        </option><option value="11">Dec
+                        </option></select>
+
+                        <select name="year">
+                        
+                        	 <option value="2023">2023
+                         
+                        	 </option><option value="2022">2022
+                         
+                        	 </option><option value="2021">2021
+                         
+                        	 </option><option value="2020">2020
+                         
+                        	 </option><option value="2019">2019
+                         
+                        </option></select></td>
+						 
+    						<td><a href="javascript:reportSubmit(document.stmtSearchForm)" onmouseover="changeImages('app_search_button', '/wicconnectclient/img/app_search_button_over.gif'); return true;" onmouseout="changeImages('app_search_button', '/wicconnectclient/img/app_search_button.gif'); return true;">
+							<img name="app_search_button" src="/wicconnectclient/img/app_search_button.gif" border="0"></a></td>
+    						 
+					  </tr>
+					</tbody></table>
+           			 </form>
+					</td>
+					<td><img src="/wicconnectclient/img/dot1.gif" width="17" height="30"></td>
+					<td width="217" class="bodysmall" valign="top">
+						<table border="0" cellpadding="0" cellspacing="3" ;="" overflow-y:="" hidden;="">
+							<tbody><tr>
+								<td style="width:50;text-wrap;word-wrap: break-word;">
+									<font style="font-weight: bold;">RYE,WELZ</font> 
+								</td>
+							</tr>
+							<tr>
+								<td style="width:20;text-wrap;word-wrap: break-word; overflow:hidden;">
+									Family ID:<font style="font-weight: bold;display: inline-block;word-break: break-word;
+									">000000000<br></font>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Card Number:<font style="font-weight: bold;">XXXXXXXXXXXX1234</font>
+								</td>
+							</tr>
+								<tr>
+								<td>
+									Card Status:<font style="font-weight: bold;">ACTIVE</font>
+								</td>
+							</tr>
+						</tbody></table>
+                    </td>
+					<td>
+						<table width="359" height="75" border="0" cellspacing="0" cellpadding="0">
+							<tbody><tr>
+								<td>
+									<a href="passwdchange.recip" class="menu_link" style="text-decoration:none;margin-left: 5">
+										<span>
+											Change Password
+										</span>
+									</a>
+									<a href="faq.recip" class="menu_link" style="text-decoration:none;margin-left: 17">
+										<span>
+											FAQ's
+										</span>
+									</a>
+									<a href="contactinfo.recip" class="menu_link" style="text-decoration:none;margin-left: 5">
+										<span>
+											Contact Info
+										</span>
+									</a>
+								</td>
+							</tr>
+							
+							
+							<tr>
+                                <td>
+                                    <a href="securityLoad.recip" class="menu_link" style="text-decoration:none;margin-left: 5">
+                                        <span>
+                                            SECURITY PROFILE
+                                        </span>
+                                    </a>
+                                    
+                                   
+                                    
+                                </td>
+                            </tr>
+                            
+							
+                            <tr><td>
+                             <a href="reportloststolendamagedcard.recip" class="menu_link" style="text-decoration:none;margin-left: 5">
+                                        <span>
+                                        
+                                            REPORT LOST / STOLEN / DAMAGED CARD 
+                                            
+                                        </span>
+                                    </a></td></tr>	
+                                    
+                                    <!-- -- Above Code was added to make Card Replacement functionality configurable by AT portal by Ashish on 22 jan,2021 --  -->
+							<tr height="30">
+								<td align="right">
+									<a href="siteLogout.recip" class="menu_link" style="text-decoration:none;margin-right: 12">
+										<span>
+											Log Out
+										</span>
+									</a>
+								</td>
+							</tr>
+						
+						</tbody></table>
+					</td>
+				</tr>
+			</tbody></table>
+		</td>
+	</tr>
+<!-- end of menu -->
+	<tr>
+		<td background="/wicconnectclient/img/app_main_content.gif">
+
+<script language="javascript">
+ <!--
+  var requestSubmitted = false;
+
+function reportSubmit(formObj) {
+        if(requestSubmitted) {
+        alert('You have already submitted the request. Please wait');
+        return false;
+    } else {
+        document.images["app_search_button"].src='/wicconnectclient/img/app_search_button_wait.gif';
+        document.stmtSearchForm.submit();
+        document.stmtSearchForm.app_search_button.disabled=true;
+        requestSubmitted = true;
+        return false;
+        }
+   }
+
+theDate = new Date();
+
+  setSelectList(document.stmtSearchForm.month, 0);
+  setSelectList(document.stmtSearchForm.year, 2023);
+
+
+-->
+</script>
+
+
+<center>
+
+<br>
+<table width="770" border="0" cellspacing="0" cellpadding="0">
+<tbody><tr>
+  <td width="20"><img src="/wicconnectclient/img/dot1.gif" width="20" height="1" border="0"></td>
+  <td width="730"><img src="/wicconnectclient/img/dot1.gif" width="20" height="1" border="0"></td>
+  <td width="20"><img src="/wicconnectclient/img/dot1.gif" width="20" height="1" border="0"></td>
+</tr>
+  <tr>
+    <td colspan="3" width="770" valign="top">
+	<img src="/wicconnectclient/img/app_heading_arrow.jpg">
+	<font class="app_heading">
+		Transaction History
+	</font>
+	<br>
+    <table cellpadding="1" cellspacing="1" border="0" style="width:720px">
+        <tbody><tr>
+        <td align="right">
+    	<a href="javascript:void(printReport())" onmouseover="changeImages('print_button', '/wicconnectclient/img/print_green_over.gif'); return true;" onmouseout="changeImages('print_button', '/wicconnectclient/img/print_green.gif'); return true;">
+							<img name="print_button" src="/wicconnectclient/img/print_green.gif" border="0" alt="print"></a>
+    	 
+        </td>
+    </tr>
+    </tbody></table></td>
+  </tr>
+  <tr>
+   <td width="20" valign="top"><img src="/wicconnectclient/img/dot1.gif" width="20" height="1" border="0"></td>
+   <td colspan="2">
+<div id="printReady">
+   <table cellpadding="1" cellspacing="0" class="greenStats" border="0" style="width:700px">
+     <tbody><tr>
+       <td bgcolor="#F4F7DD" width="362">&nbsp;<b>Card Number:</b> &nbsp;XXXXXXXXXXXX9684</td>
+       
+    	 <td bgcolor="#F4F7DD" align="right">&nbsp;&nbsp;&nbsp;&nbsp; Date Range :<b> January 2023 </b> </td>
+    	 
+     </tr>
+   </tbody></table>
+   
+
+    
+	
+	<table class="sort-table" id="table-1" bordercolor="#ffffff" cellspacing="0" cellpadding="2" width="700" bordercolorlight="#ADC6DB" border="1">
+	<thead>
+		<tr bgcolor="#CCE3E4">
+		<td class="bodyBlueB">Date<img src="img/dot1.gif" class="sort-arrow ascending"></td>
+		<td class="bodyBlueB">Quantity<img src="img/dot1.gif" class="sort-arrow"></td>
+		<td class="bodyBlueB">Unit<img src="img/dot1.gif" class="sort-arrow"></td>
+		<td class="bodyBlueB">Item<img src="img/dot1.gif" class="sort-arrow"></td>
+		<td class="bodyBlueB">Transaction<img src="img/dot1.gif" class="sort-arrow"></td>
+		<td class="bodyBlueB">Location<img src="img/dot1.gif" class="sort-arrow"></td>
+		</tr>
+	</thead>
+    
+    
+    
+	<tbody>
+	
+    
+	
+	
+    
+	
+	
+    
+	
+	
+    
+	
+	
+    
+	
+	
+    
+	
+	
+    
+	
+	
+    
+	
+	
+    
+	
+	
+    
+	
+	
+    
+	
+	
+    <tr class="RowEven" onclick="this.className='RowClick';" onmouseover="this.className='RowOver';" onmouseout="this.className='RowEven';">
+	<td><a title="01/03/2023 10:05:54" style="color: #345da1; font-weight:bold;">01/01/2023</a></td>
+	
+	<td>2.00</td>
+	<td>CONTAINER</td>
+	<td>SOME PRODUCT 2PK*4OZ</td>
+	<td>WIC PURCHASE                            </td>
+	<td>C-TOWN                        &nbsp;</td>
+	</tr><tr class="RowOdd" onclick="this.className='RowClick';" onmouseover="this.className='RowOver';" onmouseout="this.className='RowOdd';">
+	<td><a title="01/03/2023 10:05:54" style="color: #345da1; font-weight:bold;">01/02/2023</a></td>
+	
+	<td>2.00</td>
+	<td>CONTAINER</td>
+	<td>SOME OTHER PRODUCT 2PK*4OZ</td>
+	<td>WIC PURCHASE                            </td>
+	<td>C-TOWN                        &nbsp;</td>
+	</tr><tr class="RowEven" onclick="this.className='RowClick';" onmouseover="this.className='RowOver';" onmouseout="this.className='RowEven';">
+	<td><a title="01/03/2023 10:05:54" style="color: #345da1; font-weight:bold;">01/02/2023</a></td>
+	
+	<td>2.00</td>
+	<td>CONTAINER</td>
+	<td>A THIRD PRODUCT 2PK*4OZ</td>
+	<td>WIC PURCHASE                            </td>
+	<td>C-TOWN                        &nbsp;</td>
+	</tr><tr class="RowOdd" onclick="this.className='RowClick';" onmouseover="this.className='RowOver';" onmouseout="this.className='RowOdd';">
+	<td><a title="01/03/2023 10:05:54" style="color: #345da1; font-weight:bold;">01/02/2023</a></td>
+	
+	<td>2.00</td>
+	<td>CONTAINER</td>
+	<td>A FOURTH PRODUCT 2PK*4OZ</td>
+	<td>WIC PURCHASE                            </td>
+	<td>C-TOWN                        &nbsp;</td>
+	</tr><tr class="RowEven" onclick="this.className='RowClick';" onmouseover="this.className='RowOver';" onmouseout="this.className='RowEven';">
+	<td><a title="01/03/2023 10:05:54" style="color: #345da1; font-weight:bold;">01/02/2023</a></td>
+	
+	<td>1.00</td>
+	<td>CONTAINER</td>
+	<td>A FIFTH PRODUCT 4OZ</td>
+	<td>WIC PURCHASE                            </td>
+	<td>C-TOWN                        &nbsp;</td>
+	</tr><tr class="RowOdd" onclick="this.className='RowClick';" onmouseover="this.className='RowOver';" onmouseout="this.className='RowOdd';">
+	<td><a title="01/03/2023 10:05:54" style="color: #345da1; font-weight:bold;">01/02/2023</a></td>
+	
+	<td>2.00</td>
+	<td>CONTAINER</td>
+	<td>SOMETHING ELSE 4OZ</td>
+	<td>WIC PURCHASE                            </td>
+	<td>C-TOWN                        &nbsp;</td>
+	</tr><tr class="RowEven" onclick="this.className='RowClick';" onmouseover="this.className='RowOver';" onmouseout="this.className='RowEven';">
+	<td><a title="01/03/2023 10:05:54" style="color: #345da1; font-weight:bold;">01/02/2023</a></td>
+	
+	<td>2.00</td>
+	<td>CONTAINER</td>
+	<td>YET ANOTHER PRODUCT 4OZ</td>
+	<td>WIC PURCHASE                            </td>
+	<td>C-TOWN                        &nbsp;</td>
+	</tr><tr class="RowOdd" onclick="this.className='RowClick';" onmouseover="this.className='RowOver';" onmouseout="this.className='RowOdd';">
+	<td><a title="01/03/2023 10:05:54" style="color: #345da1; font-weight:bold;">01/02/2023</a></td>
+	
+	<td>2.00</td>
+	<td>CONTAINER</td>
+	<td>MORE PRODUCT 4OZ</td>
+	<td>WIC PURCHASE                            </td>
+	<td>C-TOWN                        &nbsp;</td>
+	</tr><tr class="RowEven" onclick="this.className='RowClick';" onmouseover="this.className='RowOver';" onmouseout="this.className='RowEven';">
+	<td><a title="01/27/2023 10:34:51" style="color: #345da1; font-weight:bold;">01/08/2023</a></td>
+	
+	<td>0.75</td>
+	<td>GALLON</td>
+	<td>OTHER FOOD 96OZ</td>
+	<td>WIC PURCHASE                            </td>
+	<td>C-TOWN                        &nbsp;</td>
+	</tr><tr class="RowOdd" onclick="this.className='RowClick';" onmouseover="this.className='RowOver';" onmouseout="this.className='RowOdd';">
+	<td><a title="01/30/2023 11:22:34" style="color: #345da1; font-weight:bold;">01/29/2023</a></td>
+	
+	<td>1.05</td>
+	<td>CASH VALUE BENEFIT(CVB)</td>
+	<td>ANOTHER FOOD</td>
+	<td>WIC PURCHASE                            </td>
+	<td>C-TOWN                        &nbsp;</td>
+	</tr><tr class="RowEven" onclick="this.className='RowClick';" onmouseover="this.className='RowOver';" onmouseout="this.className='RowEven';">
+	<td><a title="01/30/2023 11:22:34" style="color: #345da1; font-weight:bold;">01/29/2023</a></td>
+	
+	<td>4.29</td>
+	<td>CASH VALUE BENEFIT(CVB)</td>
+	<td>A TASTY FOOD 6PK*3.9OZ</td>
+	<td>WIC PURCHASE                            </td>
+	<td>C-TOWN                        &nbsp;</td>
+	</tr><tr class="RowOdd" onclick="this.className='RowClick';" onmouseover="this.className='RowOver';" onmouseout="this.className='RowOdd';">
+	<td><a title="01/30/2023 11:22:34" style="color: #345da1; font-weight:bold;">01/29/2023</a></td>
+	
+	<td>32.00</td>
+	<td>OUNCE</td>
+	<td>YOGURT 32OZ</td>
+	<td>WIC PURCHASE                            </td>
+	<td>C-TOWN                        &nbsp;</td>
+	</tr></tbody></table>
+    <script>
+    var st1 = new SortableTable(document.getElementById("table-1"),
+    		["DateM","Number","String","String","String","String"]);
+    st1.sort( 0 );
+    </script>
+
+ 
+ 
+<table cellpadding="0" border="0" width="700">
+  <tbody><tr>
+    <td><hr class="hr_solid"></td>
+ </tr>
+ <tr>
+    <td>	
+    	If you find transactions you believe to be in error, or you wish to dispute a specific transaction,please contact the Customer Service Center immediately.
+    <br>    
+        <small>FOR CUSTOMER SERVICE Call 1-844-540-3013. OPEN 24 HOURS A DAY, 7 DAYS A WEEK. </small> </td>
+ </tr>
+</tbody></table>
+ 
+
+    
+</div> <!---- end of printReady ---->
+<!---------------------------------------------------->
+<br><br>
+    
+     </td>
+   </tr>
+ </tbody></table>
+
+         </center></td>
+      </tr>
+    </tbody></table>
+    <!------------------------------ end of main --------->
+
+<!-- temp footer body tag -->
+<table width="825" border="0" cellpadding="0" cellspacing="0">
+	<tbody><tr>
+		<td colspan="2"><center><img src="/wicconnectclient/img/ebt_footer.gif" border="0"></center></td>
+	</tr>
+	<tr>
+		<td><img src="/wicconnectclient/img/dot1.gif" width="410" height="4" border="0"></td>
+		<td><img src="/wicconnectclient/img/dot1.gif" width="410" height="4" border="0"></td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			
+
+<table width="825" border="0" cellpadding="0" cellspacing="0">
+	<tbody><tr>
+		<td><img src="/wicconnectclient/img/dot1.gif" width="5" height="4" border="0"></td>
+		<td><img src="/wicconnectclient/img/dot1.gif" width="410" height="4" border="0"></td>
+		<td><img src="/wicconnectclient/img/dot1.gif" width="410" height="4" border="0"></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td class="footer">WIC EBT</td>
+		<td align="right">
+		
+
+
+
+
+
+	<table>
+		<tbody><tr>
+			<td>
+				<a href="setlocale.recip?locale=en&amp;actionpath=/reciptrxhistory.jsp" lang="en">
+					English</a>&nbsp;/
+				<a href="setlocale.recip?locale=es&amp;actionpath=/reciptrxhistory.jsp" lang="es">
+					Espanol</a>
+			</td>
+		</tr>
+	</tbody></table>
+	
+		</td>
+	</tr>	
+</tbody></table>
+
+<!-- end of footer -->
+
+
+
+
+		</td>
+	</tr>
+</tbody></table>
+</center>
+<!-- end of footer body tag -->
+<!------------------------ envelope header -------------->
+<div id="printExtra" style="VISIBILITY: hidden;" z-index="200">
+<br><br>
+<table cellpadding="1" cellspacing="1" border="0" style="width:700px">
+<tbody><tr>
+    <td>
+    	FOR CUSTOMER SERVICE Call 1-844-540-3013. OPEN 24 HOURS A DAY, 7 DAYS A WEEK.
+    </td>
+</tr>
+<tr>
+    <td><hr noshade="">
+    </td>
+</tr>
+</tbody></table>
+</div>
+<script language="JavaScript">
+var gAutoPrint = true; // Flag for whether or not to automatically call the print function
+
+function printReport()
+{
+
+        if (document.getElementById != null)
+        {
+                var html = '<HTML>\n<HEAD>\n';
+                if (document.getElementsByTagName != null)
+                {
+                        var headTags = document.getElementsByTagName("head");
+                        if (headTags.length > 0)
+                                html += headTags[0].innerHTML;
+                }
+                html += '\n</HE' + 'AD>\n<BODY>\n';
+                var printReadyElem = document.getElementById("printReady");
+        var printExtraElem = document.getElementById("printExtra");
+                if (printReadyElem != null)
+                {
+                html += printExtraElem.innerHTML;
+                                html += printReadyElem.innerHTML;
+                }
+                else
+                {
+                        alert('Could not find the printReady section in the HTML');
+                        return;
+                }
+
+                html += '\n</BO' + 'DY>\n</HT' + 'ML>';
+
+                var printWin = window.open("","printReport");
+                printWin.document.open();
+                printWin.document.write(html);
+                printWin.document.close();
+                if (gAutoPrint)
+                        printWin.print();
+        }
+        else
+        {
+                alert('Sorry, the print ready feature is only available in modern browsers.');
+        }
+}
+
+</script>
+
+
+</body></html>
