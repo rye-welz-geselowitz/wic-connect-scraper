@@ -119,9 +119,7 @@ def _get_benefits_from_html(html_doc):
 
     benefits = []
 
-    trs = []
-    for class_name in ['RowEven', 'RowOdd']:
-        trs += table.find_all('tr', attrs={'class': class_name})
+    trs = table.find_all('tr', attrs={'class': ['RowEven', 'RowOdd']})
     for tr in trs:
         tds = tr.find_all('td')
         benefit = {
@@ -142,9 +140,7 @@ def _get_transactions_from_html(html_doc):
 
     transactions = []
 
-    trs = []
-    for class_name in ['RowEven', 'RowOdd']:
-        trs += table.find_all('tr', attrs={'class': class_name})
+    trs = table.find_all('tr', attrs={'class': ['RowEven', 'RowOdd']})
     for tr in trs:
         tds = tr.find_all('td')
         transaction = {
