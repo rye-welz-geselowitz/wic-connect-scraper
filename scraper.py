@@ -15,11 +15,12 @@ from scrape_records import (
     record_scrape_failure
 )
 from time import sleep 
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from selenium.webdriver.remote.webelement import WebElement
 
 SLEEP_ON_TEST_DATA = bool(int(os.environ.get('SLEEP_ON_TEST_DATA', 1))) 
 LOGIN_PAGE_URL = 'https://www.wicconnect.com/wicconnectclient/siteLogonClient.recip?state=NEW%20YORK%20WIC&stateAgencyId=1'
+PROCESS_POOL_EXECUTORS_MAX_WORKERS = int(os.environ.get('PROCESS_POOL_EXECUTORS_MAX_WORKERS', 2)) 
 
 DUMMY_CREDS = ('brl', 'bananas')
 TEST_BENEFITS = [
@@ -274,14 +275,19 @@ def _scrape_transactions_for_year(username: str, password: str, year_idx: int, u
 def _flatten(l: List[List[Any]]) -> List[Any]:
     return [item for sublist in l for item in sublist]
 
-def scrape_transactions(username: str, password: str, use_headless_driver: bool=True) -> List[Dict[Any, Any]]:
+def scrape_transactions(
+    username: str,
+    password: str,
+    use_headless_driver: bool=True,
+    year_limit: Optional[int] = None
+) -> List[Dict[Any, Any]]:
     if (username, password) == DUMMY_CREDS:
         if SLEEP_ON_TEST_DATA:
             sleep(10)
         return TEST_TRANSACTIONS
 
     year_idxs = list(range(0, datetime.now().year - 2019 + 1))
-    with concurrent.futures.ProcessPoolExecutor() as executor:
+    with concurrent.futures.ProcessPoolExecutor(max_workers=PROCESS_POOL_EXECUTORS_MAX_WORKERS) as executor:
         args = [(
             username,
             password,
