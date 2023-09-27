@@ -115,6 +115,7 @@ def _login(driver: webdriver.Chrome, username: str, password: str) -> None:
     )
 
 def _get_benefits_from_html(html_doc: str) -> List[Dict[Any, Any]]:
+    logging.warning('Fetching benefits')
     soup = BeautifulSoup(html_doc, 'html.parser')
     tables = soup.find_all('table')
     table = tables[9]
@@ -180,6 +181,7 @@ def _get_benefits_expiration_from_html(html_doc: str) -> datetime:
     return datetime.strptime(tds[2].text, '%m/%d/%Y')
 
 def _get_transactions(driver: webdriver.Chrome, year_idx: int) -> List[Dict[Any, Any]]:
+    logging.warning(f'Fetching benefits for year_idx {year_idx}')
     transactions = []
     month_idx = 0
     while True:
@@ -191,6 +193,7 @@ def _get_transactions(driver: webdriver.Chrome, year_idx: int) -> List[Dict[Any,
         month_options = _get_month_options(driver)
         month_options[month_idx].click()
 
+        logging.warning(f'Fetching benefits for month_idx {month_idx}')
         # Search
         search_button = driver.find_element(By.NAME, 'app_search_button')
         search_button.click()
