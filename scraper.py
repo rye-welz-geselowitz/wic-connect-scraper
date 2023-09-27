@@ -278,8 +278,15 @@ def scrape_transactions(username: str, password: str, use_headless_driver: bool=
         return TEST_TRANSACTIONS
 
     year_idxs = list(range(0, datetime.now().year - 2019 + 1))
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        transactions = list(executor.map(lambda x: _scrape_transactions_for_year(username, password, year_idx=x, use_headless_driver=use_headless_driver), year_idxs))
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+        args = [(
+            username,
+            password,
+            year_idx,
+            use_headless_driver,
+        ) for year_idx in year_idxs]
+        mapped = executor.map(_scrape_transactions_for_year, *zip(*args))
+        transactions = list(mapped)
     return _flatten(transactions)
 
 def scrape_all(username: str, password: str, token: str) -> None:
