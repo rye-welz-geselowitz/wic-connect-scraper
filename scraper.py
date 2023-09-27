@@ -168,6 +168,13 @@ def _get_month_options(driver):
     month_options = month_input.find_elements(By.TAG_NAME, "option")    
     return month_options
 
+def _get_benefits_expiration_from_html(html_doc):
+    soup = BeautifulSoup(html_doc, 'html.parser')
+    tables = soup.find_all('table')
+    table = tables[8]
+    tds = table.find_all('td')
+    return datetime.strptime(tds[2].text, '%m/%d/%Y')
+
 def _get_transactions(driver, year_idx):
     transactions = []
     month_idx = 0

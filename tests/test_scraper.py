@@ -1,5 +1,6 @@
 
-from scraper import _get_benefits_from_html, _get_transactions_from_html
+from scraper import _get_benefits_from_html, _get_transactions_from_html, _get_benefits_expiration_from_html
+from datetime import datetime 
 
 EXPECTED_PARSED_BENEFITS =  [
     {'name': 'CHEESE', 'unit': 'OUNCE', 'issued': 16.0, 'remaining': 16.0},
@@ -30,13 +31,24 @@ EXPECTED_PARSED_TRANSACTIONS = [
 class TestGetBenefitsFromHtml:
     with open('tests/data/benefits.html', 'r') as f:
         html_doc = f.read()
-        benefits = _get_benefits_from_html(html_doc) 
+
+    benefits = _get_benefits_from_html(html_doc) 
     
     assert benefits == EXPECTED_PARSED_BENEFITS
 
 class TestGetTransactionsFromHtml:
     with open('tests/data/transactions.html', 'r') as f:
         html_doc = f.read()
-        txs = _get_transactions_from_html(html_doc) 
+
+    txs = _get_transactions_from_html(html_doc) 
     
     assert txs == EXPECTED_PARSED_TRANSACTIONS
+
+
+class TestGetBenefitsExpirationFromHtml:
+    with open('tests/data/benefits.html', 'r') as f:
+        html_doc = f.read()
+        
+    benefits_expiration = _get_benefits_expiration_from_html(html_doc) 
+    
+    assert benefits_expiration == datetime(2023, 10, 9)   
