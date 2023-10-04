@@ -76,13 +76,21 @@ def _get_benefits_expiration_from_html(html_doc: str) -> datetime:
 
 def _get_navigator(username: str, password: str, use_headless_driver: bool) -> ScrapeNavigator:
     if (username, password) == DUMMY_CREDS:
-        return DummyScrapeNavigator()
+        return DummyScrapeNavigator(
+            login_sleep_seconds=2,
+            transactions_sleep_seconds=2,
+            benefits_sleep_seconds=2
+        )
     return ScrapeNavigator(use_headless_driver)
 
 def scrape_benefits(username: str, password: str, use_headless_driver: bool=True) -> List[Dict[Any, Any]]:
+    logging.warning('Scraping benefits')
     navigator = _get_navigator(username, password, use_headless_driver)
+    logging.warning('Logging in')
     navigator.login(username, password)
+    logging.warning('Fetching benefits HTML doc')
     html_doc = navigator.get_benefits_html_doc()
+    logging.warning('Quitting navigator')
     navigator.quit() 
 
     try:

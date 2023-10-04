@@ -40,3 +40,6 @@ class DummyScrapeNavigator(ScrapeNavigator):
             html_doc = f.read()
 
         return [html_doc]
+    
+    def quit(self) -> None:
+        logging.info('Pretending to quit!')
