@@ -81,13 +81,15 @@ def _get_navigator(username: str, password: str, use_headless_driver: bool) -> S
             transactions_sleep_seconds=2,
             benefits_sleep_seconds=2
         )
-    return ScrapeNavigator(use_headless_driver)
+    return ScrapeNavigator(
+        username=username, password=password, use_headless_driver=use_headless_driver
+    )
 
 def scrape_benefits(username: str, password: str, use_headless_driver: bool=True) -> List[Dict[Any, Any]]:
     logging.warning('Scraping benefits')
     navigator = _get_navigator(username, password, use_headless_driver)
     logging.warning('Logging in')
-    navigator.login(username, password)
+    navigator.login()
     logging.warning('Fetching benefits HTML doc')
     html_doc = navigator.get_benefits_html_doc()
     logging.warning('Quitting navigator')
@@ -105,10 +107,10 @@ def _flatten(l: List[List[Any]]) -> List[Any]:
 
 def scrape_transactions(username: str, password: str, use_headless_driver: bool=True) -> List[Dict[Any, Any]]:
     navigator = _get_navigator(username, password, use_headless_driver)
-    navigator.login(username, password)
 
     max_workers = int(os.environ.get('PROCESS_POOL_EXECUTORS_MAX_WORKERS', 2)) 
     html_docs = navigator.get_transaction_html_docs(max_workers)
+    logging.warning(f'got {len(html_docs)} transactions html docs')
 
     navigator.quit() 
 

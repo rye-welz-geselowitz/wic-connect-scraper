@@ -13,7 +13,7 @@ class DummyScrapeNavigator(ScrapeNavigator):
         self.benefits_sleep_seconds = benefits_sleep_seconds
         self.transactions_sleep_seconds = transactions_sleep_seconds
 
-    def login(self, username: str, password: str) -> None:
+    def login(self) -> None:
         logging.info('Pretending to login!') 
         if self.login_sleep_seconds is not None:
             sleep(self.login_sleep_seconds)
